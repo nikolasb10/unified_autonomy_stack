@@ -45,6 +45,13 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/* \
     && apt-file update
 
+RUN wget -q -O eigen-3.4.0.tar.gz https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz && \
+    tar -xf eigen-3.4.0.tar.gz && \
+    cd eigen-3.4.0 && \
+    mkdir build && cd build && \
+    cmake .. -DCMAKE_INSTALL_PREFIX=/usr && make install && \
+    cd ../.. && rm -rf eigen-3.4.0*
+
 # Dependancies for mavlink and mavros. This should be removed once mavros version 1.22 is available from apt https://github.com/mavlink/mavros/milestone/68 at which point we dont need to build mavros and mavlink from source anymore.
 RUN apt-get update && apt-get install -y \
     libgeographic-dev \
