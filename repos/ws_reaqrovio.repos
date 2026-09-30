@@ -1,0 +1,13 @@
+repositories:
+  src/kindr:
+    type: git
+    url: git@github.com:ANYbotics/kindr.git
+    version: master
+  src/yaml_cpp_catkin:
+    type: git
+    url: git@github.com:ethz-asl/yaml_cpp_catkin.git
+    version: master
+  src/reaqrovio:
+    type: git
+    url: git@github.com:ntnu-arl/reaqrovio.git
+    version: main

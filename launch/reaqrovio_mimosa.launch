@@ -1,0 +1,23 @@
+<launch>
+  <!-- ReAqROVIO (rovio node) feeding MIMOSA's external odometry manager (loose coupling). -->
+  <arg name="filter_config" default="$(find rovio)/cfg/rcm_equirefrac/rovio_rcm_online.info"/>
+  <arg name="camera0_config" default="$(find rovio)/cfg/rcm_equirefrac/cam0.yaml"/>
+  <arg name="camera1_config" default="$(find rovio)/cfg/rcm_equirefrac/cam1.yaml"/>
+  <arg name="refractive_index" default="1.33"/> <!-- 1.0 in air, 1.33 in water -->
+  <arg name="imu_topic" default="/alphasense_driver_ros/imu"/>
+  <arg name="cam0_topic" default="/alphasense_driver_ros/cam0"/>
+  <arg name="cam1_topic" default="/alphasense_driver_ros/cam1"/>
+
+  <include file="$(find rovio)/launch/rovio_rcm.launch">
+    <arg name="filter_config" value="$(arg filter_config)"/>
+    <arg name="camera0_config" value="$(arg camera0_config)"/>
+    <arg name="camera1_config" value="$(arg camera1_config)"/>
+    <arg name="refractive_index" value="$(arg refractive_index)"/>
+  </include>
+
+  <!-- Note: rovio_rcm.launch hardcodes the alphasense topics; edit its remaps (or the args above once exposed) for other rigs. -->
+
+  <!-- rovio/odometry -> MIMOSA odometry manager input (needs odometry/manager/enabled: true) -->
+  <node pkg="topic_tools" type="relay" name="rovio_to_mimosa"
+        args="/rovio/odometry /mimosa_node/odometry/manager/odometry_in"/>
+</launch>

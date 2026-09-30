@@ -156,6 +156,14 @@ services:
       - *robot-bringup-volume
       - ./workspaces/ws_mimosa:/workspace
 
+  # --- ReAqROVIO ---
+  build_reaqrovio:
+    <<: [*catkin-build-template]
+    image: unified_autonomy:ros1_base
+    command: catkin build -DCMAKE_BUILD_TYPE=Release -DROVIO_NCAM=2 -DROVIO_NMAXFEATURE=25
+    volumes:
+      - ./workspaces/ws_reaqrovio:/workspace
+
   # --- ETHZ ASL MSF ---
   build_ethzasl_msf:
     <<: [*catkin-build-template]

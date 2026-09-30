@@ -1,0 +1,13 @@
+repositories:
+  src/kindr:
+    type: git
+    url: git@github.com:ANYbotics/kindr.git
+    version: 32800890d546e306f73c3ee3091fb6903452f925
+  src/yaml_cpp_catkin:
+    type: git
+    url: git@github.com:ethz-asl/yaml_cpp_catkin.git
+    version: 6cad108c4d5a9b9ddc95edd6f7cb23b572926351
+  src/reaqrovio:
+    type: git
+    url: git@github.com:ntnu-arl/reaqrovio.git
+    version: 7fc95c1fe97c8a4e89a1477d5699807718f37e43

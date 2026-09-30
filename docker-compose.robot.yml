@@ -324,6 +324,15 @@ services:
       - *robot-bringup-volume
       - ./workspaces/ws_mimosa:/workspace
 
+  # --- ReAqROVIO (feeds MIMOSA odometry manager) ---
+  ros1_launch_reaqrovio:
+    <<: [*ros1-launch-template]
+    image: unified_autonomy:ros1_base
+    command: roslaunch /launch/reaqrovio_mimosa.launch
+    volumes:
+      - ./launch:/launch:ro
+      - ./workspaces/ws_reaqrovio:/workspace
+
   # --- ETHZ ASL MSF ---
   ros1_launch_ethzasl_msf:
     <<: [*ros1-launch-template]
