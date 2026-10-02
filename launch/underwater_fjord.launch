@@ -1,0 +1,18 @@
+<launch>
+  <!-- MIMOSA with IMU + ReAqROVIO odometry only (no LiDAR/radar), for the underwater-datasets bags.
+       Odometry manager subscribes directly to /rovio/odometry (same remap as mimosa's euroc.launch). -->
+  <arg name="viz" default="false" />
+  <arg name="imu_topic" default="/alphasense_driver_ros/imu" />
+  <arg name="odometry_topic" default="/rovio/odometry" />
+
+  <node pkg="mimosa" type="mimosa_node" name="mimosa_node" output="screen" clear_params="true">
+    <remap from="/mimosa_node/imu/manager/imu_in" to="$(arg imu_topic)" />
+    <remap from="/mimosa_node/odometry/manager/odometry_in" to="$(arg odometry_topic)" />
+
+    <rosparam file="/launch/underwater_fjord_params.yaml"/>
+    <!-- LiDAR intrinsics are parsed even when the LiDAR manager is disabled -->
+    <rosparam file="$(find mimosa)/config/os_dummy.json" command="load" ns="lidar/sensor"/>
+  </node>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mimosa)/rviz/mimosa.rviz" if="$(arg viz)" />
+</launch>

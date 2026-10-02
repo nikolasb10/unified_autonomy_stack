@@ -1,0 +1,62 @@
+# Underwater scenario: ReAqROVIO (camera + IMU) feeding MIMOSA's odometry manager (loose coupling).
+# Play a bag (or run the cameras + IMU) separately; see REAQROVIO_INTEGRATION.md.
+#   make launch DOCKER_COMPOSE_FILE=docker-compose.underwater.yml
+
+# ==================== ANCHORS/TEMPLATES ====================
+x-system-template: &system-template
+  working_dir: /workspace
+  network_mode: host
+  ipc: host
+  restart: "no"
+  stdin_open: true
+  tty: true
+  environment:
+  - DISPLAY=${DISPLAY:-:0}
+  - NVIDIA_VISIBLE_DEVICES=all
+  - NVIDIA_DRIVER_CAPABILITIES=all
+  - QT_X11_NO_MITSHM=1
+  - DISABLE_ROS1_EOL_WARNINGS=1
+  volumes:
+    - /tmp/.X11-unix:/tmp/.X11-unix:rw
+
+x-ros1-wait-for-roscore: &ros1-wait-for-roscore
+  depends_on:
+    ros1_launch_roscore:
+      condition: service_healthy
+
+x-ros1-launch-template: &ros1-launch-template
+  <<: [*system-template, *ros1-wait-for-roscore]
+  profiles: ["launch"]
+
+services:
+  # --- ROScore (needed for centralized roscore) ---
+  ros1_launch_roscore:
+    <<: [*system-template]
+    image: unified_autonomy:ros1_base
+    profiles: ["launch"]
+    command: roscore
+    healthcheck:
+      test: ["CMD-SHELL", "bash", "-c", "source /opt/ros/noetic/setup.bash && rostopic list || exit 1"]
+      interval: 2s
+      timeout: 2s
+      retries: 5
+      start_period: 3s  # Give it time to start before checking
+
+  # --- MIMOSA with IMU + ReAqROVIO odometry only (no LiDAR/radar) ---
+  ros1_launch_mimosa_underwater:
+    <<: [*ros1-launch-template]
+    image: unified_autonomy:ros1_base
+    command: roslaunch /launch/underwater_fjord.launch
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ./launch:/launch:ro
+      - ./workspaces/ws_mimosa:/workspace
+
+  # --- ReAqROVIO (feeds MIMOSA odometry manager) ---
+  ros1_launch_reaqrovio:
+    <<: [*ros1-launch-template]
+    image: unified_autonomy:ros1_base
+    command: roslaunch /launch/reaqrovio_mimosa.launch
+    volumes:
+      - ./launch:/launch:ro
+      - ./workspaces/ws_reaqrovio:/workspace

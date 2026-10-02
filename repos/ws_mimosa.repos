@@ -13,5 +13,5 @@ repositories:
     version: minimal_updated
   src/mimosa:
     type: git
-    url: git@github.com:ntnu-arl/mimosa.git
-    version: main
+    url: git@github.com:nikolasb10/mimosa.git
+    version: reaqrovio-covariance

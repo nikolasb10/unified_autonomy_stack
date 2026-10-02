@@ -7,6 +7,10 @@ repositories:
     type: git
     url: git@github.com:ethz-asl/yaml_cpp_catkin.git
     version: 6cad108c4d5a9b9ddc95edd6f7cb23b572926351
+  src/catkin_simple:
+    type: git
+    url: git@github.com:catkin/catkin_simple.git
+    version: 0e62848b12da76c8cc58a1add42b4f894d1ac21e
   src/reaqrovio:
     type: git
     url: git@github.com:ntnu-arl/reaqrovio.git

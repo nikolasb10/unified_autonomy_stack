@@ -13,5 +13,5 @@ repositories:
     version: 7164869d32e7a102ce55875a0e17ccc7c0aa0b5f
   src/mimosa:
     type: git
-    url: git@github.com:ntnu-arl/mimosa.git
-    version: 9df689e01a36f3d138158ed49a8d51c255551d4d
+    url: git@github.com:nikolasb10/mimosa.git
+    version: 7eb85c62f7447f0e9922c7d87eab8539a737f9ca
